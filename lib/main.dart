@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import 'models/BookRecord.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -12,22 +14,26 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Book Votes Home Page'),
+      home: MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController _textEditingController = new TextEditingController();
+
+  void _submitRecord() {
+    Firestore.instance.collection('book').add(<String, dynamic>{
+      'title': _textEditingController.text,
+      'votes': 1,
+    });
+    _textEditingController.text = '';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,18 +75,15 @@ class _MyHomePageState extends State<MyHomePage> {
         Expanded(
           flex: 1,
           child: RaisedButton(
-            child: Text("SUBMIT"),
+            child: Text(
+              "SUBMIT",
+              style: TextStyle(color: Colors.white),
+            ),
             color: Colors.blue,
             shape: RoundedRectangleBorder(
               borderRadius: new BorderRadius.circular(10.0),
             ),
-            onPressed: () {
-              Firestore.instance.collection('book').add(<String, dynamic>{
-                'title': _textEditingController.text,
-                'votes': 1,
-              });
-              _textEditingController.text = '';
-            },
+            onPressed: _submitRecord
           ),
         )
       ],
@@ -92,7 +95,6 @@ class _MyHomePageState extends State<MyHomePage> {
       stream: Firestore.instance.collection('book').snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return LinearProgressIndicator();
-
         return _buildList(context, snapshot.data.documents);
       },
     );
@@ -106,7 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
-    final record = Record.fromSnapshot(data);
+    final record = BookRecord.fromSnapshot(data);
 
     return Padding(
       key: ValueKey(record.title),
@@ -121,8 +123,7 @@ class _MyHomePageState extends State<MyHomePage> {
           trailing: Text(record.votes.toString()),
           onTap: () => Firestore.instance.runTransaction((transaction) async {
             final freshSnapshot = await transaction.get(record.reference);
-            final fresh = Record.fromSnapshot(freshSnapshot);
-
+            final fresh = BookRecord.fromSnapshot(freshSnapshot);
             await transaction
                 .update(record.reference, {'votes': fresh.votes + 1});
           }),
@@ -132,20 +133,4 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class Record {
-  final String title;
-  final int votes;
-  final DocumentReference reference;
 
-  Record.fromMap(Map map, {this.reference})
-      : assert(map['title'] != null),
-        assert(map['votes'] != null),
-        title = map['title'],
-        votes = map['votes'];
-
-  Record.fromSnapshot(DocumentSnapshot snapshot)
-      : this.fromMap(snapshot.data, reference: snapshot.reference);
-
-  @override
-  String toString() => "Record<$title:$votes>";
-}
