@@ -27,13 +27,63 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final TextEditingController _textEditingController = new TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Baby Name Votes')
       ),
-      body: _buildBody(context),
+      body: Column(
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.all(2.0),
+            child: _buildAddArea(context),
+          ),
+          Expanded(
+            child: SizedBox.expand(
+              child: _buildBody(context),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAddArea(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        Expanded(
+          flex: 3,
+          child: TextField(
+            controller: _textEditingController,
+            enabled: true,
+            decoration: InputDecoration(
+              labelText: 'New Baby Name',
+              hintText: 'Baby Name',
+              icon: Icon(Icons.child_care),
+            ),
+          ),
+        ),
+        Expanded(
+          flex: 1,
+          child: RaisedButton(
+            child: Text("Submit"),
+            color: Colors.blue,
+            shape: RoundedRectangleBorder(
+              borderRadius: new BorderRadius.circular(10.0),
+            ),
+            onPressed: () {
+              Firestore.instance.collection('baby').add(<String, dynamic>{
+                'name': _textEditingController.text,
+                'votes': 0,
+              });
+              _textEditingController.text = '';
+            },
+          ),
+        )
+      ],
     );
   }
 
