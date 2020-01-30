@@ -8,11 +8,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Votes App',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Book Votes Home Page'),
     );
   }
 }
@@ -33,7 +33,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Baby Name Votes')
+        title: Text('Book Votes')
       ),
       body: Column(
         children: <Widget>[
@@ -60,24 +60,24 @@ class _MyHomePageState extends State<MyHomePage> {
             controller: _textEditingController,
             enabled: true,
             decoration: InputDecoration(
-              labelText: 'New Baby Name',
-              hintText: 'Baby Name',
-              icon: Icon(Icons.child_care),
+              labelText: 'New Book Title',
+              hintText: 'Book Title',
+              icon: Icon(Icons.book),
             ),
           ),
         ),
         Expanded(
           flex: 1,
           child: RaisedButton(
-            child: Text("Submit"),
+            child: Text("SUBMIT"),
             color: Colors.blue,
             shape: RoundedRectangleBorder(
               borderRadius: new BorderRadius.circular(10.0),
             ),
             onPressed: () {
-              Firestore.instance.collection('baby').add(<String, dynamic>{
-                'name': _textEditingController.text,
-                'votes': 0,
+              Firestore.instance.collection('book').add(<String, dynamic>{
+                'title': _textEditingController.text,
+                'votes': 1,
               });
               _textEditingController.text = '';
             },
@@ -89,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget _buildBody(BuildContext context) {
     return StreamBuilder(
-      stream: Firestore.instance.collection('baby').snapshots(),
+      stream: Firestore.instance.collection('book').snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return LinearProgressIndicator();
 
@@ -109,7 +109,7 @@ class _MyHomePageState extends State<MyHomePage> {
     final record = Record.fromSnapshot(data);
 
     return Padding(
-      key: ValueKey(record.name),
+      key: ValueKey(record.title),
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Container(
         decoration: BoxDecoration(
@@ -117,7 +117,7 @@ class _MyHomePageState extends State<MyHomePage> {
           borderRadius: BorderRadius.circular(5.0),
         ),
         child: ListTile(
-          title: Text(record.name),
+          title: Text(record.title),
           trailing: Text(record.votes.toString()),
           onTap: () => Firestore.instance.runTransaction((transaction) async {
             final freshSnapshot = await transaction.get(record.reference);
@@ -133,19 +133,19 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class Record {
-  final String name;
+  final String title;
   final int votes;
   final DocumentReference reference;
 
   Record.fromMap(Map map, {this.reference})
-      : assert(map['name'] != null),
+      : assert(map['title'] != null),
         assert(map['votes'] != null),
-        name = map['name'],
+        title = map['title'],
         votes = map['votes'];
 
   Record.fromSnapshot(DocumentSnapshot snapshot)
       : this.fromMap(snapshot.data, reference: snapshot.reference);
 
   @override
-  String toString() => "Record<$name:$votes>";
+  String toString() => "Record<$title:$votes>";
 }
