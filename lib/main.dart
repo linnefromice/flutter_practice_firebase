@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_practice_firebase/services/BookRecordService.dart';
 
 import 'models/BookRecord.dart';
 
@@ -28,10 +29,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController _textEditingController = new TextEditingController();
 
   void _submitRecord() {
-    Firestore.instance.collection('book').add(<String, dynamic>{
-      'title': _textEditingController.text,
-      'votes': 1,
-    });
+    BookRecordService.addBookRecord(_textEditingController.text);
     _textEditingController.text = '';
   }
 
@@ -92,7 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget _buildBody(BuildContext context) {
     return StreamBuilder(
-      stream: Firestore.instance.collection('book').snapshots(),
+      stream: BookRecordService.selectBookRecords(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return LinearProgressIndicator();
         return _buildList(context, snapshot.data.documents);
@@ -121,12 +119,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: ListTile(
           title: Text(record.title),
           trailing: Text(record.votes.toString()),
-          onTap: () => Firestore.instance.runTransaction((transaction) async {
-            final freshSnapshot = await transaction.get(record.reference);
-            final fresh = BookRecord.fromSnapshot(freshSnapshot);
-            await transaction
-                .update(record.reference, {'votes': fresh.votes + 1});
-          }),
+          onTap: () => BookRecordService.addVote(record),
         ),
       ),
     );
