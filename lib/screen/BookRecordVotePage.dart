@@ -12,6 +12,7 @@ class BookRecordVotePage extends StatefulWidget {
 
 class _State extends State<BookRecordVotePage> {
   final TextEditingController _textEditingController = new TextEditingController();
+  int _selectedIndex = 0;
 
   void _submitRecord() {
     BookRecordService.addBookRecord(_textEditingController.text);
@@ -37,6 +38,7 @@ class _State extends State<BookRecordVotePage> {
           ),
         ],
       ),
+      bottomNavigationBar: _buildBottomNavigationBar(context),
     );
   }
 
@@ -103,10 +105,32 @@ class _State extends State<BookRecordVotePage> {
         ),
         child: ListTile(
           title: Text(record.title),
+          subtitle: Text('TODO'),
           trailing: Text(record.votes.toString()),
           onTap: () => BookRecordService.addVote(record),
         ),
       ),
     );
+  }
+
+  Widget _buildBottomNavigationBar(BuildContext context) {
+    return BottomNavigationBar(
+      items: <BottomNavigationBarItem>[
+        BottomNavigationBarItem(
+          icon: Icon(Icons.book),
+          title: Text('Book'),
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.movie),
+          title: Text('Movie'),
+        ),
+      ],
+      onTap: _onItemTapped,
+      currentIndex: _selectedIndex,
+    );
+  }
+
+  void _onItemTapped(int index) {
+    // TODO
   }
 }
