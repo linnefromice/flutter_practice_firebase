@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MovieRecordVotePage(),
+      home: BookRecordVotePage(),
       routes: <String, WidgetBuilder>{
         '/book': (context) => BookRecordVotePage(),
         '/movie': (context) => MovieRecordVotePage(),

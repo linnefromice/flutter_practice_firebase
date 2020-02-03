@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter_practice_firebase/models/BookRecord.dart';
+import 'package:flutter_practice_firebase/screen/widgets/CommonBottomNavigationBar.dart';
 import 'package:flutter_practice_firebase/services/BookRecordService.dart';
 
 
@@ -38,7 +39,10 @@ class _State extends State<BookRecordVotePage> {
           ),
         ],
       ),
-      bottomNavigationBar: _buildBottomNavigationBar(context),
+      bottomNavigationBar: CommonBottomNavigationBar(
+        context: context,
+        selectedIndex: 0,
+      ),
     );
   }
 
@@ -111,35 +115,5 @@ class _State extends State<BookRecordVotePage> {
         ),
       ),
     );
-  }
-
-  Widget _buildBottomNavigationBar(BuildContext context) {
-    return BottomNavigationBar(
-      items: <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
-          icon: Icon(Icons.book),
-          title: Text('Book'),
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.movie),
-          title: Text('Movie'),
-        ),
-      ],
-      onTap: _onItemTapped,
-      currentIndex: _selectedIndex,
-    );
-  }
-
-  void _onItemTapped(int index) {
-    switch (index) {
-      case 0:
-        Navigator.of(context).pushNamed('/book');
-        break;
-      case 1:
-        Navigator.of(context).pushNamed('/movie');
-        break;
-      default:
-        break;
-    }
   }
 }
