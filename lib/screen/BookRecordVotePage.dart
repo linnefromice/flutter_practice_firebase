@@ -13,7 +13,6 @@ class BookRecordVotePage extends StatefulWidget {
 
 class _State extends State<BookRecordVotePage> {
   final TextEditingController _textEditingController = new TextEditingController();
-  int _selectedIndex = 0;
 
   void _submitRecord() {
     BookRecordService.addBookRecord(_textEditingController.text);

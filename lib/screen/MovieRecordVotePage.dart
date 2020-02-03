@@ -13,7 +13,6 @@ class MovieRecordVotePage extends StatefulWidget {
 
 class _State extends State<MovieRecordVotePage> {
   final TextEditingController _textEditingController = new TextEditingController();
-  int _selectedIndex = 1;
 
   void _submitRecord() {
     MovieRecordService.addMovieRecord(_textEditingController.text);
@@ -114,13 +113,6 @@ class _State extends State<MovieRecordVotePage> {
           onTap: () => MovieRecordService.addVote(record),
         ),
       ),
-    );
-  }
-
-  Widget _buildBottomNavigationBar(BuildContext context) {
-    return CommonBottomNavigationBar(
-      context: context,
-      selectedIndex: 1,
     );
   }
 }
