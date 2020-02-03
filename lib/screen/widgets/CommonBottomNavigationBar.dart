@@ -18,6 +18,10 @@ class CommonBottomNavigationBar extends StatelessWidget {
           icon: Icon(Icons.movie),
           title: Text('Movie'),
         ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.music_note),
+          title: Text('Musician'),
+        ),
       ],
       onTap: _onItemTapped,
       currentIndex: selectedIndex,
@@ -31,6 +35,9 @@ class CommonBottomNavigationBar extends StatelessWidget {
         break;
       case 1:
         Navigator.of(context).pushNamed('/movie');
+        break;
+      case 2:
+        Navigator.of(context).pushNamed('/musician');
         break;
       default:
         break;
