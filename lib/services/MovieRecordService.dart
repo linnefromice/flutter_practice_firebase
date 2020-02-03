@@ -11,6 +11,7 @@ class MovieRecordService {
   static void addMovieRecord(final String title) {
     _collection.add(<String, dynamic>{
       'title': title,
+      'description': 'NEW RECORD',
       'votes': 1,
     });
   }

@@ -105,7 +105,7 @@ class _State extends State<BookRecordVotePage> {
         ),
         child: ListTile(
           title: Text(record.title),
-          subtitle: Text('TODO'),
+          subtitle: Text(record.description),
           trailing: Text(record.votes.toString()),
           onTap: () => BookRecordService.addVote(record),
         ),
@@ -131,6 +131,15 @@ class _State extends State<BookRecordVotePage> {
   }
 
   void _onItemTapped(int index) {
-    // TODO
+    switch (index) {
+      case 0:
+        Navigator.of(context).pushNamed('/book');
+        break;
+      case 1:
+        Navigator.of(context).pushNamed('/movie');
+        break;
+      default:
+        break;
+    }
   }
 }
