@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_practice_firebase/Routes.dart';
 import 'package:flutter_practice_firebase/screen/BookRecordVotePage.dart';
 import 'package:flutter_practice_firebase/screen/MovieRecordVotePage.dart';
 
@@ -13,11 +14,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: BookRecordVotePage(),
-      routes: <String, WidgetBuilder>{
-        '/book': (context) => BookRecordVotePage(),
-        '/movie': (context) => MovieRecordVotePage(),
-      },
+      home: Routes.home,
+      routes: Routes.routes
     );
   }
 }
