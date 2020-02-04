@@ -12,11 +12,23 @@ class BookRecordVotePage extends StatefulWidget {
 }
 
 class _State extends State<BookRecordVotePage> {
-  final TextEditingController _textEditingController = new TextEditingController();
+  final TextEditingController _titleTextEditingController = new TextEditingController();
+  final TextEditingController _descriptionTextEditingController = new TextEditingController();
 
   void _submitRecord() {
-    BookRecordService.addBookRecord(_textEditingController.text);
-    _textEditingController.text = '';
+    BookRecordService.addBookRecord(
+      _titleTextEditingController.text,
+      _descriptionTextEditingController.text
+    );
+    _titleTextEditingController.text = '';
+    _descriptionTextEditingController.text = '';
+  }
+
+  @override
+  void dispose() {
+    _titleTextEditingController.dispose();
+    _descriptionTextEditingController.dispose();
+    super.dispose();
   }
 
   @override
@@ -50,30 +62,45 @@ class _State extends State<BookRecordVotePage> {
       children: <Widget>[
         Expanded(
           flex: 3,
-          child: TextField(
-            controller: _textEditingController,
-            enabled: true,
-            decoration: InputDecoration(
-              labelText: 'New Book Title',
-              hintText: 'Book Title',
-              icon: Icon(Icons.book),
-            ),
-          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              TextField(
+                controller: _titleTextEditingController,
+                enabled: true,
+                decoration: InputDecoration(
+                  labelText: 'New Book Title',
+                  hintText: 'Title',
+                  icon: Icon(Icons.book),
+                ),
+              ),
+              TextField(
+                controller: _descriptionTextEditingController,
+                enabled: true,
+                decoration: InputDecoration(
+                  labelText: 'New Book Description',
+                  hintText: 'Description',
+                  icon: Icon(Icons.description),
+                ),
+                maxLines: 3,
+              ),
+            ],
+          )
         ),
         Expanded(
           flex: 1,
-          child: RaisedButton(
-              child: Text(
-                "SUBMIT",
-                style: TextStyle(color: Colors.white),
-              ),
-              color: Colors.blue,
-              shape: RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(10.0),
-              ),
-              onPressed: _submitRecord
+          child: Ink(
+            decoration: ShapeDecoration(
+              color: Colors.lightBlue,
+              shape: CircleBorder(),
+            ),
+            child: IconButton(
+              icon: Icon(Icons.add),
+             color: Colors.white,
+             onPressed: _submitRecord
+            ),
           ),
-        )
+        ),
       ],
     );
   }

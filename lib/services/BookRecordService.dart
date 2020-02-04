@@ -8,10 +8,10 @@ class BookRecordService {
     return _collection.snapshots();
   }
 
-  static void addBookRecord(final String title) {
+  static void addBookRecord(final String title, final String description) {
     _collection.add(<String, dynamic>{
       'title': title,
-      'description': 'NEW RECORD',
+      'description': description,
       'votes': 1,
     });
   }
