@@ -134,9 +134,14 @@ class _State extends State<BookRecordVotePage> {
           borderRadius: BorderRadius.circular(5.0),
         ),
         child: ListTile(
+          leading: Text(record.votes.toString()),
           title: Text(record.title),
           subtitle: Text(record.description),
-          trailing: Text(record.votes.toString()),
+          trailing: IconButton(
+            icon: Icon(Icons.cancel),
+            color: Colors.black,
+            onPressed: () => BookRecordService.removeBookRecord(record)
+          ),
           onTap: () => BookRecordService.addVote(record),
         ),
       ),

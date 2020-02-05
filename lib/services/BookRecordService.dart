@@ -24,4 +24,9 @@ class BookRecordService {
           .update(record.reference, {'votes': fresh.votes + 1});
     });
   }
+
+  static void removeBookRecord(final BookRecord record) {
+    final docId = record.reference.documentID;
+    _collection.document(docId).delete();
+  }
 }
