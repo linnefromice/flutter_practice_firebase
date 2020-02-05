@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_practice_firebase/services/AuthService.dart';
 
 class LoginPage extends StatefulWidget {
 
@@ -11,14 +13,32 @@ class _State extends State<LoginPage> {
 
   String _email = '';
   String _password = '';
+  String _errorMessage = '';
 
   void _validateAndSubmit() {
+    setState(() {
+      _errorMessage = '';
+    });
+
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      // TODO: validation & authentication & delete debug code
-      print("Email:" + _email);
-      print("Password:" + _password);
-      Navigator.of(context).pushNamed('/book');
+
+      if (_email == '1993' && _password == '1993') {
+        print("Dummy Login");
+        Navigator.of(context).pushNamed('/book');
+        return;
+      }
+
+      AuthService.login(_email, _password)
+        .then((AuthResult result) {
+          print("LOGIN SUCCESS - user: " + result.user.uid);
+          Navigator.of(context).pushNamed('/book');
+        }).catchError((e) {
+          print(e);
+          setState(() {
+            _errorMessage = 'LOGIN FAILURE';
+          });
+        });
     }
   }
 
@@ -39,9 +59,8 @@ class _State extends State<LoginPage> {
         validator: (value) => value.isEmpty ? 'Email can\'t be empty' : null,
         onSaved: (value) {
           setState(() {
-            _password = value;
+            _email = value;
           });
-          print("Email.onSaved: " + value);
         },
       ),
     );
@@ -66,7 +85,6 @@ class _State extends State<LoginPage> {
           setState(() {
             _password = value;
           });
-          print("Password.onSaved: " + value);
         },
       ),
     );
@@ -92,6 +110,26 @@ class _State extends State<LoginPage> {
     );
   }
 
+  Widget _buildErrorMessage() {
+    if (_errorMessage == '') {
+      return Text('');
+    } else {
+      return Container(
+        padding: EdgeInsets.only(top: 10.0),
+        alignment: Alignment.center,
+        child: Text(
+          _errorMessage,
+          style: TextStyle(
+            fontSize: 13.0,
+            color: Colors.red,
+            height: 3.0,
+            fontWeight: FontWeight.bold
+          ),
+        ),
+      );
+    }
+  }
+
   Widget _buildForm() {
     return Container(
       padding: EdgeInsets.all(12.0),
@@ -103,6 +141,7 @@ class _State extends State<LoginPage> {
             _buildEmailInput(),
             _buildPasswordInput(),
             _buildPrimaryButton(),
+            _buildErrorMessage(),
           ],
         ),
       )
