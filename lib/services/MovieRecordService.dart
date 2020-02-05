@@ -8,10 +8,10 @@ class MovieRecordService {
     return _collection.snapshots();
   }
 
-  static void addMovieRecord(final String title) {
+  static void addMovieRecord(final String title, final String description) {
     _collection.add(<String, dynamic>{
       'title': title,
-      'description': 'NEW RECORD',
+      'description': description,
       'votes': 1,
     });
   }

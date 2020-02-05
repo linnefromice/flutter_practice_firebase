@@ -12,11 +12,16 @@ class MovieRecordVotePage extends StatefulWidget {
 }
 
 class _State extends State<MovieRecordVotePage> {
-  final TextEditingController _textEditingController = new TextEditingController();
+  final TextEditingController _titleTextEditingController = new TextEditingController();
+  final TextEditingController _descriptionTextEditingController = new TextEditingController();
 
   void _submitRecord() {
-    MovieRecordService.addMovieRecord(_textEditingController.text);
-    _textEditingController.text = '';
+    MovieRecordService.addMovieRecord(
+      _titleTextEditingController.text,
+      _descriptionTextEditingController.text,
+    );
+    _titleTextEditingController.text = '';
+    _descriptionTextEditingController.text = '';
   }
 
   @override
@@ -49,31 +54,46 @@ class _State extends State<MovieRecordVotePage> {
     return Row(
       children: <Widget>[
         Expanded(
-          flex: 3,
-          child: TextField(
-            controller: _textEditingController,
-            enabled: true,
-            decoration: InputDecoration(
-              labelText: 'New Movie Title',
-              hintText: 'Movie Title',
-              icon: Icon(Icons.movie),
-            ),
-          ),
+            flex: 3,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                TextField(
+                  controller: _titleTextEditingController,
+                  enabled: true,
+                  decoration: InputDecoration(
+                    labelText: 'New Movie Title',
+                    hintText: 'Title',
+                    icon: Icon(Icons.movie),
+                  ),
+                ),
+                TextField(
+                  controller: _descriptionTextEditingController,
+                  enabled: true,
+                  decoration: InputDecoration(
+                    labelText: 'New Movie Description',
+                    hintText: 'Description',
+                    icon: Icon(Icons.description),
+                  ),
+                  maxLines: 3,
+                ),
+              ],
+            )
         ),
         Expanded(
           flex: 1,
-          child: RaisedButton(
-              child: Text(
-                "SUBMIT",
-                style: TextStyle(color: Colors.white),
-              ),
-              color: Colors.blue,
-              shape: RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(10.0),
-              ),
+          child: Ink(
+            decoration: ShapeDecoration(
+              color: Colors.lightBlue,
+              shape: CircleBorder(),
+            ),
+            child: IconButton(
+              icon: Icon(Icons.add),
+              color: Colors.white,
               onPressed: _submitRecord
+            ),
           ),
-        )
+        ),
       ],
     );
   }
