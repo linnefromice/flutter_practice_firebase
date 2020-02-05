@@ -12,11 +12,16 @@ class MusicianRecordVotePage extends StatefulWidget {
 }
 
 class _State extends State<MusicianRecordVotePage> {
-  final TextEditingController _textEditingController = new TextEditingController();
+  final TextEditingController _titleTextEditingController = new TextEditingController();
+  final TextEditingController _descriptionTextEditingController = new TextEditingController();
 
   void _submitRecord() {
-    MusicianRecordService.addMusicianRecord(_textEditingController.text);
-    _textEditingController.text = '';
+    MusicianRecordService.addMusicianRecord(
+      _titleTextEditingController.text,
+      _descriptionTextEditingController.text
+    );
+    _titleTextEditingController.text = '';
+    _descriptionTextEditingController.text = '';
   }
 
   @override
@@ -49,33 +54,49 @@ class _State extends State<MusicianRecordVotePage> {
     return Row(
       children: <Widget>[
         Expanded(
-          flex: 3,
-          child: TextField(
-            controller: _textEditingController,
-            enabled: true,
-            decoration: InputDecoration(
-              labelText: 'New Musician Title',
-              hintText: 'Musician Title',
-              icon: Icon(Icons.music_note),
-            ),
-          ),
+            flex: 3,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                TextField(
+                  controller: _titleTextEditingController,
+                  enabled: true,
+                  decoration: InputDecoration(
+                    labelText: 'New Music Title',
+                    hintText: 'Title',
+                    icon: Icon(Icons.music_note),
+                  ),
+                ),
+                TextField(
+                  controller: _descriptionTextEditingController,
+                  enabled: true,
+                  decoration: InputDecoration(
+                    labelText: 'New Music Description',
+                    hintText: 'Description',
+                    icon: Icon(Icons.description),
+                  ),
+                  maxLines: 3,
+                ),
+              ],
+            )
         ),
         Expanded(
           flex: 1,
-          child: RaisedButton(
-              child: Text(
-                "SUBMIT",
-                style: TextStyle(color: Colors.white),
-              ),
-              color: Colors.blue,
-              shape: RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(10.0),
-              ),
-              onPressed: _submitRecord
+          child: Ink(
+            decoration: ShapeDecoration(
+              color: Colors.lightBlue,
+              shape: CircleBorder(),
+            ),
+            child: IconButton(
+                icon: Icon(Icons.add),
+                color: Colors.white,
+                onPressed: _submitRecord
+            ),
           ),
-        )
+        ),
       ],
     );
+
   }
 
   Widget _buildBody(BuildContext context) {

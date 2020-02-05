@@ -8,10 +8,10 @@ class MusicianRecordService {
     return _collection.snapshots();
   }
 
-  static void addMusicianRecord(final String title) {
+  static void addMusicianRecord(final String title, final String description) {
     _collection.add(<String, dynamic>{
       'title': title,
-      'description': 'NEW RECORD',
+      'description': description,
       'votes': 1,
     });
   }
