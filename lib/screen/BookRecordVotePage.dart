@@ -133,18 +133,26 @@ class _State extends State<BookRecordVotePage> {
           border: Border.all(color: Colors.grey),
           borderRadius: BorderRadius.circular(5.0),
         ),
-        child: ListTile(
-          leading: Text(record.votes.toString()),
-          title: Text(record.title),
-          subtitle: Text(record.description),
-          trailing: IconButton(
-            icon: Icon(Icons.cancel),
-            color: Colors.black,
-            onPressed: () => BookRecordService.removeBookRecord(record)
-          ),
-          onTap: () => BookRecordService.addVote(record),
-        ),
+        child: _buildListItemContent(context, record)
       ),
+    );
+  }
+
+  Widget _buildListItemContent(BuildContext context, BookRecord record) {
+    return ListTile(
+      leading: Text(record.votes.toString()),
+      title: Text(record.title),
+      subtitle: Text(record.description),
+      trailing: _buildRemoveButton(record),
+      onTap: () => BookRecordService.addVote(record),
+    );
+  }
+
+  Widget _buildRemoveButton(BookRecord record) {
+    return IconButton(
+      icon: Icon(Icons.cancel),
+      color: Colors.black,
+      onPressed: () => BookRecordService.removeBookRecord(record)
     );
   }
 }
