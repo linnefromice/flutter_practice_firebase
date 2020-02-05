@@ -126,13 +126,26 @@ class _State extends State<MovieRecordVotePage> {
           border: Border.all(color: Colors.grey),
           borderRadius: BorderRadius.circular(5.0),
         ),
-        child: ListTile(
-          title: Text(record.title),
-          subtitle: Text(record.description),
-          trailing: Text(record.votes.toString()),
-          onTap: () => MovieRecordService.addVote(record),
-        ),
+        child: _buildListItemContent(context, record)
       ),
+    );
+  }
+
+  Widget _buildListItemContent(BuildContext context, MovieRecord record) {
+    return ListTile(
+      leading: Text(record.votes.toString()),
+      title: Text(record.title),
+      subtitle: Text(record.description),
+      trailing: _buildRemoveButton(record),
+      onTap: () => MovieRecordService.addVote(record),
+    );
+  }
+
+  Widget _buildRemoveButton(MovieRecord record) {
+    return IconButton(
+        icon: Icon(Icons.cancel),
+        color: Colors.black,
+        onPressed: () => MovieRecordService.removeMovieRecord(record)
     );
   }
 }

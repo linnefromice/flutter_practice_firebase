@@ -24,4 +24,9 @@ class MovieRecordService {
           .update(record.reference, {'votes': fresh.votes + 1});
     });
   }
+
+  static void removeMovieRecord(final MovieRecord record) {
+    final docId = record.reference.documentID;
+    _collection.document(docId).delete();
+  }
 }
