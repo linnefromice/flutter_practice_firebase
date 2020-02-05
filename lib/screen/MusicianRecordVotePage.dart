@@ -127,13 +127,26 @@ class _State extends State<MusicianRecordVotePage> {
           border: Border.all(color: Colors.grey),
           borderRadius: BorderRadius.circular(5.0),
         ),
-        child: ListTile(
-          title: Text(record.title),
-          subtitle: Text(record.description),
-          trailing: Text(record.votes.toString()),
-          onTap: () => MusicianRecordService.addVote(record),
-        ),
+        child: _buildListItemContent(context, record)
       ),
+    );
+  }
+
+  Widget _buildListItemContent(BuildContext context, MusicianRecord record) {
+    return ListTile(
+      leading: Text(record.votes.toString()),
+      title: Text(record.title),
+      subtitle: Text(record.description),
+      trailing: _buildRemoveButton(record),
+      onTap: () => MusicianRecordService.addVote(record),
+    );
+  }
+
+  Widget _buildRemoveButton(MusicianRecord record) {
+    return IconButton(
+        icon: Icon(Icons.cancel),
+        color: Colors.black,
+        onPressed: () => MusicianRecordService.removeMusicianRecord(record)
     );
   }
 }

@@ -24,4 +24,9 @@ class MusicianRecordService {
           .update(record.reference, {'votes': fresh.votes + 1});
     });
   }
+
+  static void removeMusicianRecord(final MusicianRecord record) {
+    final docId = record.reference.documentID;
+    _collection.document(docId).delete();
+  }
 }
