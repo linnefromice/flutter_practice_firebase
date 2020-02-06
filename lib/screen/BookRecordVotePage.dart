@@ -39,10 +39,6 @@ class _State extends State<BookRecordVotePage> {
       ),
       body: Column(
         children: <Widget>[
-          Container(
-            padding: EdgeInsets.all(2.0),
-            child: _buildAddArea(context),
-          ),
           Expanded(
             child: SizedBox.expand(
               child: _buildBody(context),
@@ -50,6 +46,7 @@ class _State extends State<BookRecordVotePage> {
           ),
         ],
       ),
+      floatingActionButton: _buildFloatingActionButton(context),
       bottomNavigationBar: CommonBottomNavigationBar(
         context: context,
         selectedIndex: 0,
@@ -57,49 +54,58 @@ class _State extends State<BookRecordVotePage> {
     );
   }
 
-  Widget _buildAddArea(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        Expanded(
-          flex: 3,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              TextField(
-                controller: _titleTextEditingController,
-                enabled: true,
-                decoration: InputDecoration(
-                  labelText: 'New Book Title',
-                  hintText: 'Title',
-                  icon: Icon(Icons.book),
-                ),
-              ),
-              TextField(
-                controller: _descriptionTextEditingController,
-                enabled: true,
-                decoration: InputDecoration(
-                  labelText: 'New Book Description',
-                  hintText: 'Description',
-                  icon: Icon(Icons.description),
-                ),
-                maxLines: 3,
-              ),
-            ],
-          )
-        ),
-        Expanded(
-          flex: 1,
-          child: Ink(
-            decoration: ShapeDecoration(
-              color: Colors.lightBlue,
-              shape: CircleBorder(),
-            ),
-            child: IconButton(
-              icon: Icon(Icons.add),
-             color: Colors.white,
-             onPressed: _submitRecord
+  Widget _buildFloatingActionButton(BuildContext context) {
+    return FloatingActionButton(
+      child: Icon(Icons.add),
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: (_) {
+            return _buildAddAreaDialog(context);
+          }
+        );
+      }
+    );
+  }
+
+  Widget _buildAddAreaDialog(BuildContext context) {
+    return AlertDialog(
+      title: Text('Add Record'),
+      content: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          TextField(
+            controller: _titleTextEditingController,
+            enabled: true,
+            decoration: InputDecoration(
+              labelText: 'New Book Title',
+              hintText: 'Title',
+              icon: Icon(Icons.book),
             ),
           ),
+          TextField(
+            controller: _descriptionTextEditingController,
+            enabled: true,
+            decoration: InputDecoration(
+              labelText: 'New Book Description',
+              hintText: 'Description',
+              icon: Icon(Icons.description),
+            ),
+            maxLines: 3,
+          ),
+        ],
+      ),
+      actions: <Widget>[
+        RaisedButton.icon(
+          onPressed: _submitRecord,
+          icon: Icon(Icons.add),
+          label: Text('ADD'),
+          color: Colors.blue,
+        ),
+        RaisedButton.icon(
+          onPressed: () => Navigator.pop(context),
+          icon: Icon(Icons.cancel),
+          label: Text('CLOSE'),
         ),
       ],
     );
